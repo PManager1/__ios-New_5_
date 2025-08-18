@@ -2,33 +2,50 @@
 import SwiftUI
 import Combine
 
+// MARK: - Config (Assumed to be provided by an external 'config.swift' file.)
+// You should ensure this struct is defined in your project's Config.swift.
+// struct Config {
+//     static let apiBaseURL = "https://xmkvtmgtwb.execute-api.us-east-1.amazonaws.com/dev/";
+// }
+
+// MARK: - Dummy Backend Structures (for UI demonstration only)
+// In a real app, these would come from your actual networking layer
+
+
+// MARK: - SignInView
+
 struct SignInView: View {
-    @State private var phoneNumber: String = ""
-    @State private var loading = false
-    @State private var demoLoading = false
-    @State private var errorMessage: String? = nil
-    @State private var showSuccessAlert = false
-    @State private var showDemoSuccessAlert = false
+    // This binding allows SignInView to interact with the NavigationStack
+    @Binding var path: NavigationPath
     
+    @State private var phoneNumber: String = ""
+    @State private var loading = false // Controls loading for "Send OTP" button
+    @State private var demoLoading = false // Controls loading for "Demo Login" button
+    @State private var errorMessage: String? = nil
+    @State private var showSuccessAlert = false // To show alert on successful OTP send
+    @State private var showDemoSuccessAlert = false // To show alert on successful demo login
+    
+    // UI state for button and text field animations
     @State private var inputScale: CGFloat = 1.0
     @State private var buttonScale: CGFloat = 1.0
     @State private var demoButtonScale: CGFloat = 1.0
     
+    // Focus state to automatically open keyboard on specific TextField
     @FocusState private var phoneFieldIsFocused: Bool
     
     var body: some View {
         VStack(spacing: 20) {
             Text("Sign In to Birdy")
-                .font(.custom("Nunito-Bold", size: 28)) // Applying Nunito-Bold
+                .font(.custom("Nunito-Bold", size: 28)) // Applying Nunito-Bold font
                 .foregroundColor(Color.blue)
             
             VStack(alignment: .leading, spacing: 8) {
                 Text("Phone Number")
-                    .font(.custom("Nunito-Regular", size: 14)) // Applying Nunito-Regular
+                    .font(.custom("Nunito-Regular", size: 14)) // Applying Nunito-Regular font
                     .foregroundColor(.gray)
                 
                 TextField("123-456-7890", text: $phoneNumber)
-                    .font(.custom("Nunito-Regular", size: 16)) // Applying Nunito-Regular
+                    .font(.custom("Nunito-Regular", size: 16)) // Applying Nunito-Regular font
                     .keyboardType(.phonePad)
                     .padding()
                     .background(Color.white)
@@ -38,15 +55,15 @@ struct SignInView: View {
                             .stroke(Color.blue.opacity(0.5), lineWidth: 1)
                     )
                     .scaleEffect(inputScale)
-                    .focused($phoneFieldIsFocused)
+                    .focused($phoneFieldIsFocused) // Connects TextField to focus state
                     .onTapGesture {
                         withAnimation(.spring()) {
-                            inputScale = 1.05
+                            inputScale = 1.05 // Animate scale on tap
                         }
                     }
                     .onChange(of: phoneNumber) { newValue in
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            withAnimation(.spring()) { inputScale = 1.0 }
+                            withAnimation(.spring()) { inputScale = 1.0 } // Reset scale after change
                         }
                         let formatted = formatPhoneNumber(newValue)
                         phoneNumber = formatted.formattedNumber
@@ -57,27 +74,22 @@ struct SignInView: View {
             
             if let error = errorMessage {
                 Text(error)
-                    .font(.custom("Nunito-Regular", size: 14)) // Applying Nunito-Regular
+                    .font(.custom("Nunito-Regular", size: 14)) // Applying Nunito-Regular font
                     .foregroundColor(.red)
                     .padding(.horizontal)
                     .multilineTextAlignment(.center)
             }
             
-            Button(action: {
-                loading = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    loading = false
-                    showSuccessAlert = true
-                }
-            }) {
+            // MARK: - Send OTP Button
+            Button(action: handleSendOTP) { // Triggers the simulated backend call
                 HStack {
                     if loading {
-                        ProgressView()
+                        ProgressView() // Show loading indicator
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     }
                     Text(loading ? "Sending..." : "Send me OTP")
                 }
-                .font(.custom("Nunito-Bold", size: 16)) // Applying Nunito-Bold
+                .font(.custom("Nunito-Bold", size: 16)) // Applying Nunito-Bold font
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -89,32 +101,27 @@ struct SignInView: View {
                     )
                 )
                 .cornerRadius(25)
-                .scaleEffect(buttonScale)
+                .scaleEffect(buttonScale) // Animate scale on tap
             }
-            .disabled(loading || !isValidPhoneNumber())
+            .disabled(loading || !isValidPhoneNumber()) // Disable during loading or invalid phone
             .padding(.horizontal)
             .onTapGesture {
-                withAnimation(.spring()) { buttonScale = 0.95 }
+                withAnimation(.spring()) { buttonScale = 0.95 } // Animate press
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    withAnimation(.spring()) { buttonScale = 1.0 }
+                    withAnimation(.spring()) { buttonScale = 1.0 } // Reset after press
                 }
             }
             
-            Button(action: {
-                demoLoading = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    demoLoading = false
-                    showDemoSuccessAlert = true
-                }
-            }) {
+            // MARK: - Demo Login Button
+            Button(action: handleDemoLogin) { // Triggers a simulated demo login
                 HStack {
                     if demoLoading {
-                        ProgressView()
+                        ProgressView() // Show loading indicator
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     }
                     Text(demoLoading ? "Logging in..." : "Demo Login")
                 }
-                .font(.custom("Nunito-Bold", size: 16)) // Applying Nunito-Bold
+                .font(.custom("Nunito-Bold", size: 16)) // Applying Nunito-Bold font
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -126,31 +133,32 @@ struct SignInView: View {
                     )
                 )
                 .cornerRadius(25)
-                .scaleEffect(demoButtonScale)
+                .scaleEffect(demoButtonScale) // Animate scale on tap
             }
-            .disabled(demoLoading)
+            .disabled(demoLoading) // Disable during loading
             .padding(.horizontal)
             .onTapGesture {
-                withAnimation(.spring()) { demoButtonScale = 0.95 }
+                withAnimation(.spring()) { demoButtonScale = 0.95 } // Animate press
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    withAnimation(.spring()) { demoButtonScale = 1.0 }
+                    withAnimation(.spring()) { demoButtonScale = 1.0 } // Reset after press
                 }
             }
             
-            Spacer()
+            Spacer() // Pushes content towards the top
         }
         .padding(.vertical)
         .background(
             LinearGradient(
                 gradient: Gradient(colors: [
-                    Color(red: 230/255, green: 240/255, blue: 250/255),
-                    Color(red: 179/255, green: 205/255, blue: 224/255)
+                    Color(red: 230/255, green: 240/255, blue: 250/255), // Light blue top
+                    Color(red: 179/255, green: 205/255, blue: 224/255)  // Slightly darker blue bottom
                 ]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .ignoresSafeArea()
+            .ignoresSafeArea() // Extends background to fill entire screen
         )
+        // Combined alert for success messages (either OTP sent or Demo Login success)
         .alert(isPresented: Binding<Bool>(
             get: { showSuccessAlert || showDemoSuccessAlert },
             set: { _ in
@@ -162,23 +170,32 @@ struct SignInView: View {
                 return Alert(
                     title: Text("Success"),
                     message: Text("OTP sent successfully"),
-                    dismissButton: .default(Text("OK")) {}
+                    dismissButton: .default(Text("OK")) {
+                        // Navigate to VerifyOtp screen, passing the phone number
+                        // This assumes VerifyOtp is available in your project.
+                        path.append(VerifyOtp(phoneNumber: phoneNumber))
+                    }
                 )
             } else {
                 return Alert(
                     title: Text("Success"),
                     message: Text("Demo login successful"),
-                    dismissButton: .default(Text("OK")) {}
+                    dismissButton: .default(Text("OK")) {
+                        // For demo, we'll just dismiss the alert here.
+                    }
                 )
             }
         }
         .onAppear {
+            // Automatically focus the phone number field when the view appears
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 phoneFieldIsFocused = true
             }
         }
     }
     
+    // MARK: - Helper Functions
+    // Formats the phone number as xxx-xxx-xxxx and provides validation feedback
     private func formatPhoneNumber(_ input: String) -> (formattedNumber: String, error: String?) {
         let digits = input.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
         if digits.count > 10 { return (phoneNumber, "Phone number cannot exceed 10 digits") }
@@ -193,22 +210,84 @@ struct SignInView: View {
         return (formatted, error)
     }
     
+    // Validates if the phone number is exactly 10 digits long
     private func isValidPhoneNumber() -> Bool {
         let digits = phoneNumber.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
         return digits.count == 10
     }
     
-    private func checkExistingToken() { /* Your original commented out code */ }
-    private func validateToken(_ token: String) async -> Bool { return true }
-}
-
-struct SignInView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            SignInView()
+    // MARK: - Backend Call Handlers (Simulated for UI demonstration)
+    private func handleSendOTP() {
+        guard isValidPhoneNumber() else {
+            errorMessage = "Please enter a valid 10-digit phone number."
+            return
+        }
+        loading = true
+        errorMessage = nil // Clear any previous errors
+        
+        Task { // Use a Task to simulate an asynchronous network request
+            do {
+                // This block simulates your backend API call.
+                // In a real app, you would make a network request here.
+                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/send-otp")!)
+                request.httpMethod = "POST"
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                let body: [String: String] = ["phoneNumber": phoneNumber]
+                request.httpBody = try JSONSerialization.data(withJSONObject: body)
+                
+                // Simulate network delay (e.g., 2 seconds)
+                try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+                
+                // Simulate a successful response
+                DispatchQueue.main.async {
+                    self.loading = false
+                    self.showSuccessAlert = true // Show success alert, which then triggers navigation
+                }
+                
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Failed to send OTP: \(error.localizedDescription)"
+                    self.loading = false
+                }
+            }
+        }
+    }
+    
+    private func handleDemoLogin() {
+        demoLoading = true
+        errorMessage = nil
+        
+        Task { // Use a Task to simulate an asynchronous demo login
+            do {
+                // Simulate network delay for demo login (e.g., 2 seconds)
+                try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+                
+                DispatchQueue.main.async {
+                    self.demoLoading = false
+                    self.showDemoSuccessAlert = true
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Failed to demo login: \(error.localizedDescription)"
+                    self.demoLoading = false
+                }
+            }
         }
     }
 }
+
+
+// MARK: - Preview Provider
+struct SignInView_Previews: PreviewProvider {
+    @State static var previewPath = NavigationPath() // Create a static binding for preview
+    
+    static var previews: some View {
+        NavigationStack(path: $previewPath) { // Wrap in NavigationStack and pass the path
+            SignInView(path: $previewPath)
+        }
+    }
+}
+
 
 
 

@@ -19,11 +19,16 @@ struct HomeView: View {
                         NavigationLink("Profile", destination: Text("Profile Screen"))
                         NavigationLink("Trips", destination: Text("Trips Screen"))
 //                    SettingsButton(title: " CurrentLocation", color: Color(hex: "#FF9800"), destination: { CurrentLocation() })
-                    SettingsButton(title: " GoMapView", color: Color(hex: "#FF9800"), destination: { GoMapView() })
+//                    SettingsButton(title: " GoMapView", color: Color(hex: "#FF9800"), destination: { GoMapView() })
                     // SettingsButton(title: "Cards", color: Color(hex: "#FF9800"), destination: { SwiperDemoView() })
-//                     SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView(path: $path) })
+
+                    // SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView(path: $path) })
+
+                    SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView  })
                     
-             SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView() })
+                    
+                    
+//             SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView() })
                    
                     // SettingsButton(title: "GoogleMapView", color: Color(hex: "#FF9800"), destination: { GoogleMapView() })
 //                    SettingsButton(title: "Google screws things up", color: Color(hex: "#FF9800"), destination: { GoogleSignInView() })
@@ -118,6 +123,8 @@ struct HomeView_Previews: PreviewProvider {
     }
 }
 
+
+
 // import SwiftUI
 
 // struct HomeView: View {
@@ -152,20 +159,30 @@ struct HomeView_Previews: PreviewProvider {
 //     }
 // }
 
+
 */
+
 
 
 import SwiftUI
 
 struct HomeView: View {
+    // THIS IS THE CRITICAL LINE: HomeView needs to accept the path as a binding
+    @Binding var path: NavigationPath 
+    
+    // REMOVE THIS LINE: @State static var previewPath = NavigationPath() // <--- DELETE THIS LINE from here!
+    
     var body: some View {
-        NavigationStack {
+        // No NavigationStack needed here as NavigationControllerView already provides it
+        // NavigationStack { // <--- REMOVE this NavigationStack, it's redundant
             VStack(spacing: 20) {
                 Text("Welcome to Birdy")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
-                NavigationLink(destination: SignInView()) {
+                // Now this will work because HomeView has a 'path' binding
+                NavigationLink(destination: SignInView(path: $path)) {
+
                     Text("Sign In")
                         .font(.title2)
                         .frame(maxWidth: .infinity)
@@ -176,8 +193,8 @@ struct HomeView: View {
                 }
                 .accessibilityLabel("Sign In")
                 
-                
-                NavigationLink(destination: VerifyOtp()) {
+                // If VerifyOtp requires phoneNumber, pass it here too:
+                NavigationLink(destination: VerifyOtp(phoneNumber: nil)) { // Example: passing nil
                     Text("VerifyOtp")
                         .font(.title2)
                         .frame(maxWidth: .infinity)
@@ -189,7 +206,7 @@ struct HomeView: View {
                 .accessibilityLabel("verify OTP")
                 
                 
-                
+                // ... (rest of your buttons) ...
                 Button(action: {
                     print("Button 1 tapped")
                 }) {
@@ -233,12 +250,17 @@ struct HomeView: View {
             }
             .padding()
             .navigationTitle("Home")
-        }
+        // } // <--- REMOVE this closing brace for NavigationStack
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
+    // This is correct: declare it here for the preview's scope
+    @State static var previewPath = NavigationPath() 
+
     static var previews: some View {
-        HomeView()
+        // This is correct: pass the binding to HomeView for the preview
+        HomeView(path: $previewPath) 
     }
 }
+

@@ -15,7 +15,7 @@ import Foundation
 
 enum AppRoute: Hashable {
     case signIn // Add if needed from original app
-    case verifyOtp(phoneNumber: String)
+    case VerifyOtp(phoneNumber: String)
     case testScreens
     case userSettings
     case profile
@@ -27,8 +27,8 @@ enum AppRoute: Hashable {
         switch self {
         case .signIn:
             hasher.combine("signIn")
-        case .verifyOtp(let phoneNumber):
-            hasher.combine("verifyOtp")
+        case .VerifyOtp(let phoneNumber):
+            hasher.combine("VerifyOtp")
             hasher.combine(phoneNumber)
         case .testScreens:
             hasher.combine("testScreens")
@@ -48,7 +48,7 @@ enum AppRoute: Hashable {
         switch (lhs, rhs) {
         case (.signIn, .signIn):
             return true
-        case (.verifyOtp(let lhsPhone), .verifyOtp(let rhsPhone)):
+        case (.VerifyOtp(let lhsPhone), .VerifyOtp(let rhsPhone)):
             return lhsPhone == rhsPhone
         case (.testScreens, .testScreens):
             return true
