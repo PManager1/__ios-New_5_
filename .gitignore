@@ -1,0 +1,100 @@
+# === Xcode ===
+DerivedData/
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xcuserstate
+*.xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
+*.xcsettings
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+*.xcscheme
+*.xcconfig
+*.xcarchive
+
+# === Swift Package Manager ===
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# === CocoaPods ===
+Pods/
+Podfile.lock
+Podfile~
+
+# === Carthage ===
+Carthage/Build/
+
+# === Fastlane ===
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# === Firebase ===
+GoogleService-Info.plist
+
+# === Simulator logs ===
+*.simruntime
+*.device
+*.simsettings
+
+# === Node.js / JavaScript ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+.env
+.env.*
+
+# === React Native (if used) ===
+android/.gradle
+android/app/build/
+ios/Pods/
+ios/build/
+*.keystore
+
+# === System / Editor / Misc ===
+*.DS_Store
+*.log
+*.swp
+*.swo
+*.tmp
+*.bak
+*.moved-aside
+.idea/
+.vscode/
+*.orig
+*~.nib
+
+# === Archives and Outputs ===
+*.dSYM.zip
+*.dSYM
+*.ipa
+*.app
+*.xcarchive
+*.zip
+*.tar.gz
+
+# === Other secrets/certs ===
+*.key
+*.crt
+*.pem
+*.p12
+*.mobileprovision
+
+# === Playground ===
+timeline.xctimeline
+playground.xcworkspace
