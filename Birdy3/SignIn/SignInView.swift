@@ -34,6 +34,8 @@ struct SignInView: View {
     @FocusState private var phoneFieldIsFocused: Bool
     
     var body: some View {
+
+
         VStack(spacing: 20) {
             Text("Sign In to Birdy")
                 .font(.custom("Nunito-Bold", size: 28)) // Applying Nunito-Bold font
@@ -216,42 +218,110 @@ struct SignInView: View {
         return digits.count == 10
     }
     
+
+    
     // MARK: - Backend Call Handlers (Simulated for UI demonstration)
-    private func handleSendOTP() {
-        guard isValidPhoneNumber() else {
-            errorMessage = "Please enter a valid 10-digit phone number."
-            return
-        }
-        loading = true
-        errorMessage = nil // Clear any previous errors
+    // private func handleSendOTP() {
+    //     guard isValidPhoneNumber() else {
+    //         errorMessage = "Please enter a valid 10-digit phone number."
+    //         return
+    //     }
+    //     loading = true
+    //     errorMessage = nil // Clear any previous errors
         
-        Task { // Use a Task to simulate an asynchronous network request
-            do {
-                // This block simulates your backend API call.
-                // In a real app, you would make a network request here.
-                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/send-otp")!)
-                request.httpMethod = "POST"
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                let body: [String: String] = ["phoneNumber": phoneNumber]
-                request.httpBody = try JSONSerialization.data(withJSONObject: body)
+    //     Task { // Use a Task to simulate an asynchronous network request
+    //         do {
+    //             // This block simulates your backend API call.
+    //             // In a real app, you would make a network request here.
+    //             var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/send-otp")!)
+    //             request.httpMethod = "POST"
+    //             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    //             let body: [String: String] = ["phoneNumber": phoneNumber]
+    //             request.httpBody = try JSONSerialization.data(withJSONObject: body)
                 
-                // Simulate network delay (e.g., 2 seconds)
-                try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+    //             // Simulate network delay (e.g., 2 seconds)
+    //             try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
                 
-                // Simulate a successful response
-                DispatchQueue.main.async {
-                    self.loading = false
-                    self.showSuccessAlert = true // Show success alert, which then triggers navigation
+    //             // Simulate a successful response
+    //             DispatchQueue.main.async {
+    //                 self.loading = false
+    //                 self.showSuccessAlert = true // Show success alert, which then triggers navigation
+    //             }
+                
+    //         } catch {
+    //             DispatchQueue.main.async {
+    //                 self.errorMessage = "Failed to send OTP: \(error.localizedDescription)"
+    //                 self.loading = false
+    //             }
+    //         }
+    //     }
+    // }
+
+    private func handleSendOTP() {
+    guard isValidPhoneNumber() else {
+        errorMessage = "Please enter a valid 10-digit phone number."
+        return
+    }
+    loading = true
+    errorMessage = nil // Clear any previous errors
+    
+    Task { // Use a Task to make an asynchronous network request
+        do {
+            // Log the URL and payload for debugging
+            let urlString = "\(Config.apiBaseURL)auth/send-otp"
+            print("Attempting to call API: \(urlString)")
+            print("Payload: {\"phoneNumber\": \"\(phoneNumber)\"}")
+
+            var request = URLRequest(url: URL(string: urlString)!)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            let body: [String: String] = ["phoneNumber": phoneNumber]
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+            
+            // Perform the actual network request
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            // Process the HTTP response
+            if let httpResponse = response as? HTTPURLResponse {
+                print("Response Status Code: \(httpResponse.statusCode)")
+                print("Response Headers: \(httpResponse.allHeaderFields)")
+
+                if httpResponse.statusCode == 200 {
+                    // Success case
+                    print("OTP send successful. Raw data: \(String(data: data, encoding: .utf8) ?? "N/A")")
+                    DispatchQueue.main.async {
+                        self.loading = false
+                        self.showSuccessAlert = true // Trigger success alert, which navigates
+                    }
+                } else {
+                    // Error case (non-200 status code)
+                    print("OTP send failed. Raw error data: \(String(data: data, encoding: .utf8) ?? "N/A")")
+                    let errorData = try? JSONDecoder().decode(ErrorResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        self.errorMessage = errorData?.message ?? errorData?.error ?? "Failed to send OTP (Status: \(httpResponse.statusCode))"
+                        self.loading = false
+                    }
                 }
-                
-            } catch {
+            } else {
+                // Non-HTTP response
                 DispatchQueue.main.async {
-                    self.errorMessage = "Failed to send OTP: \(error.localizedDescription)"
+                    self.errorMessage = "Invalid server response."
                     self.loading = false
                 }
             }
+            
+        } catch {
+            // Catch any network errors (e.g., no internet, malformed URL) or decoding errors
+            print("Network/Decoding Error: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                self.errorMessage = "Failed to connect: \(error.localizedDescription)"
+                self.loading = false
+            }
         }
     }
+}
+
+
     
     private func handleDemoLogin() {
         demoLoading = true
@@ -274,6 +344,24 @@ struct SignInView: View {
             }
         }
     }
+
+
+        // Error response structure (Example)
+struct ErrorResponse: Decodable {
+    let error: String?
+    let message: String? // <-- This 'message' property is what was missing or removed!
+    let code: Int? // Common for backend error codes (optional)
+}
+
+// Success response structure for OTP send (Example)
+// Your actual API might return a verification ID, a message, etc.
+struct OtpSendSuccessResponse: Decodable {
+    let message: String
+    let verificationId: String? // Example: an ID needed for VerifyOtp screen (optional)
+}
+
+
+
 }
 
 
@@ -632,5 +720,4 @@ struct SignInView_Previews: PreviewProvider {
 }
 
 */
-
 
