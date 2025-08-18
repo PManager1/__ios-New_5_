@@ -1,0 +1,9 @@
+project 'Birdy3.xcodeproj'  # must match your .xcodeproj file
+
+platform :ios, '16.0'
+use_frameworks!
+
+target 'Birdy3' do           # must match your app target in Xcode
+  pod 'GoogleMaps'
+  pod 'GoogleSignIn'
+end
