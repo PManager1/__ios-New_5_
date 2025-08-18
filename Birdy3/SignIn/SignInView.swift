@@ -10,7 +10,7 @@ struct SignInView: View {
             Color.gray.opacity(0.2)
                 .ignoresSafeArea()
             
-            Text("First Screen")
+            Text("Signiin Dummy Screen")
                 .font(.largeTitle)
                 .fontWeight(.bold)
         }

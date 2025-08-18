@@ -22,7 +22,9 @@ struct HomeView: View {
 //                    SettingsButton(title: " CurrentLocation", color: Color(hex: "#FF9800"), destination: { CurrentLocation() })
                     SettingsButton(title: " GoMapView", color: Color(hex: "#FF9800"), destination: { GoMapView() })
                     // SettingsButton(title: "Cards", color: Color(hex: "#FF9800"), destination: { SwiperDemoView() })
-                    // SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView(path: $path) })
+//                     SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView(path: $path) })
+                    
+             SettingsButton(title: "Sign in", color: Color(hex: "#FF9800"), destination: { SignInView() })
                    
                     // SettingsButton(title: "GoogleMapView", color: Color(hex: "#FF9800"), destination: { GoogleMapView() })
 //                    SettingsButton(title: "Google screws things up", color: Color(hex: "#FF9800"), destination: { GoogleSignInView() })
