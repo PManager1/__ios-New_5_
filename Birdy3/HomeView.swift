@@ -1,6 +1,5 @@
-
+/*
 import SwiftUI
-
 struct HomeView: View {
     var body: some View {
         NavigationView {
@@ -152,3 +151,94 @@ struct HomeView_Previews: PreviewProvider {
 //         HomeView()
 //     }
 // }
+
+*/
+
+
+import SwiftUI
+
+struct HomeView: View {
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 20) {
+                Text("Welcome to Birdy")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                
+                NavigationLink(destination: SignInView()) {
+                    Text("Sign In")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .accessibilityLabel("Sign In")
+                
+                
+                NavigationLink(destination: VerifyOtp()) {
+                    Text("VerifyOtp")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .accessibilityLabel("verify OTP")
+                
+                
+                
+                Button(action: {
+                    print("Button 1 tapped")
+                }) {
+                    Text("Button 1")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                }
+                .accessibilityLabel("Verify OTP")
+                
+                Button(action: {
+                    print("Button 2 tapped")
+                }) {
+                    Text("Button 2")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                }
+                .accessibilityLabel("Custom Button 2")
+                
+                Button(action: {
+                    print("Button 3 tapped")
+                }) {
+                    Text("Button 3")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                }
+                .accessibilityLabel("Custom Button 3")
+                
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Home")
+        }
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
+}
