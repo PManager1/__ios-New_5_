@@ -124,25 +124,25 @@ struct SignInView: View {
                 .accessibilityLabel("Demo Login")
             }
 
-            Button(action: {
-                print("Extra Action tapped")
-            }) {
-                Text("Extra Action")
-                    .font(.custom("Nunito-Bold", size: 16))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.blue, Color(red: 59/255, green: 130/255, blue: 246/255)]),
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .cornerRadius(25)
-            }
-            .padding(.horizontal)
-            .accessibilityLabel("Extra Action")
+            // Button(action: {
+            //     print("Extra Action tapped")
+            // }) {
+            //     Text("Extra Action")
+            //         .font(.custom("Nunito-Bold", size: 16))
+            //         .foregroundColor(.white)
+            //         .frame(maxWidth: .infinity)
+            //         .padding()
+            //         .background(
+            //             LinearGradient(
+            //                 gradient: Gradient(colors: [Color.blue, Color(red: 59/255, green: 130/255, blue: 246/255)]),
+            //                 startPoint: .leading,
+            //                 endPoint: .trailing
+            //             )
+            //         )
+            //         .cornerRadius(25)
+            // }
+            // .padding(.horizontal)
+            // .accessibilityLabel("Extra Action")
 
             Spacer()
         }
