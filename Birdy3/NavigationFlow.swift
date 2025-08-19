@@ -18,6 +18,7 @@ struct NavigationFlow: View {
                 switch route {
                 case .home:
                     HomeView(path: $path)
+                        .navigationBarBackButtonHidden(true)
                 case .signIn:
                     SignInView(path: $path)
                 case .verifyOtp(let phoneNumber):
