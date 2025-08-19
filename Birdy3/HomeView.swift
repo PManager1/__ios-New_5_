@@ -4,6 +4,8 @@ struct HomeView: View {
     @Binding var path: NavigationPath
 
     var body: some View {
+        ZStack {
+            ScrollView {
         VStack(spacing: 20) {
             Text("Welcome to Birdy")
                 .font(.largeTitle)
@@ -67,14 +69,38 @@ struct HomeView: View {
             }
             .accessibilityLabel("Home Button 1")
 
-       
+         // Old Stuff Section
+        Text("Old stuff")
+                        .font(.custom("Nunito-Bold", size: 18))
+                        .foregroundColor(Color(red: 30/255, green: 64/255, blue: 175/255))
+                        .padding(.top, 10)
+
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        // SettingsButton(title: "CurrentLocation", color: Color(hex: "#FF9800"), destination: {  CurrentLocation()   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+
+
+        SettingsButton(title: "RiderHome", color: Color(hex: "#FF9800"), destination: {  RiderHome(path: $path)   })
+        // SettingsButton(title: "ChooseRide", color: Color(hex: "#FF9800"), destination: {  ChooseRide(path: $path)   })
+        // SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+
 
          
 
             Spacer()
         }
         .padding()
+            }
         .navigationTitle("Home")
+        }
     }
 }
 
@@ -87,8 +113,31 @@ struct HomeView_Previews: PreviewProvider {
 }
 
 
+struct SettingsButton: View {
+    let title: String
+    let color: Color
+    let destination: () -> any View
+    
+    var body: some View {
+        NavigationLink {
+            AnyView(destination())
+        } label: {
+            Text(title)
+                .font(.custom("Nunito-Bold", size: 16))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(color)
+                .cornerRadius(10)
+        }
+    }
+}
+
+
 
 /*
+
+
 import SwiftUI
 struct HomeView: View {
     var body: some View {

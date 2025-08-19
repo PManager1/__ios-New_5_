@@ -68,25 +68,25 @@ struct TestScreensView: View {
     }
 }
 
-struct SettingsButton: View {
-    let title: String
-    let color: Color
-    let destination: () -> any View
-    
-    var body: some View {
-        NavigationLink {
-            AnyView(destination())
-        } label: {
-            Text(title)
-                .font(.custom("Nunito-Bold", size: 16))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(color)
-                .cornerRadius(10)
-        }
-    }
-}
+//struct SettingsButton: View {
+//    let title: String
+//    let color: Color
+//    let destination: () -> any View
+//    
+//    var body: some View {
+//        NavigationLink {
+//            AnyView(destination())
+//        } label: {
+//            Text(title)
+//                .font(.custom("Nunito-Bold", size: 16))
+//                .foregroundColor(.white)
+//                .frame(maxWidth: .infinity)
+//                .padding()
+//                .background(color)
+//                .cornerRadius(10)
+//        }
+//    }
+//}
 
 struct DividerView: View {
     var body: some View {

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct RiderHome: View {
+    @Binding var path: NavigationPath
+
     @State private var destination: String = ""
     @State private var containerScale: CGFloat = 1.0
 
@@ -163,6 +165,11 @@ extension View {
 
 struct RiderHome_Previews: PreviewProvider {
     static var previews: some View {
-        RiderHome()
+        // RiderHome()
+        NavigationStack {
+            NewView(path: .constant(NavigationPath()))
+        }
     }
 }
+
+
