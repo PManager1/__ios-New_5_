@@ -87,50 +87,83 @@ struct VerifyOtp: View {
             }
             
             // MARK: - Verify OTP Button
-            Button(action: {
-                if otp.isEmpty {
-                    errorMessage = "Please enter the OTP code."
-                    return
-                }
-                loading = true // Activate loading state
-                errorMessage = nil // Clear previous errors
+            // Button(action: {
+            //     if otp.isEmpty {
+            //         errorMessage = "Please enter the OTP code."
+            //         return
+            //     }
+            //     loading = true // Activate loading state
+            //     errorMessage = nil // Clear previous errors
                 
-                // Simulate backend call delay
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    loading = false // Deactivate loading state
-                    showSuccessAlert = true // Show success alert
-                }
-            }) {
-                HStack {
-                    if loading {
-                        ProgressView() // Show spinning indicator
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+            //     // Simulate backend call delay
+            //     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            //         loading = false // Deactivate loading state
+            //         showSuccessAlert = true // Show success alert
+            //     }
+            // }) {
+            //     HStack {
+            //         if loading {
+            //             ProgressView() // Show spinning indicator
+            //                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
+            //         }
+            //         Text(loading ? "Verifying..." : "Verify OTP")
+            //     }
+            //     .font(.custom("Nunito-Bold", size: 16)) // Apply custom font
+            //     .foregroundColor(.white)
+            //     .frame(maxWidth: .infinity)
+            //     .padding()
+            //     .background(
+            //         LinearGradient( // Blue gradient background
+            //             gradient: Gradient(colors: [Color.blue, Color(red: 59/255, green: 130/255, blue: 246/255)]),
+            //             startPoint: .leading,
+            //             endPoint: .trailing
+            //         )
+            //     )
+            //     .cornerRadius(25)
+            //     .scaleEffect(verifyButtonScale) // Apply scale animation for tap feedback
+            // }
+            // .disabled(loading || otp.isEmpty) // Disable button during loading or if OTP is empty
+            // .padding(.horizontal)
+            // .onTapGesture {
+            //     // Animate button press
+            //     withAnimation(.spring()) { verifyButtonScale = 0.95 }
+            //     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            //         withAnimation(.spring()) { verifyButtonScale = 1.0 }
+            //     }
+            // }
+
+            Button(action: {
+                    handleVerifyOTP()
+                }) {
+                    HStack {
+                        if loading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        }
+                        Text(loading ? "Verifying..." : "Verify OTP")
                     }
-                    Text(loading ? "Verifying..." : "Verify OTP")
-                }
-                .font(.custom("Nunito-Bold", size: 16)) // Apply custom font
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(
-                    LinearGradient( // Blue gradient background
-                        gradient: Gradient(colors: [Color.blue, Color(red: 59/255, green: 130/255, blue: 246/255)]),
-                        startPoint: .leading,
-                        endPoint: .trailing
+                    .font(.custom("Nunito-Bold", size: 16))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.blue, Color(red: 59/255, green: 130/255, blue: 246/255)]),
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
                     )
-                )
-                .cornerRadius(25)
-                .scaleEffect(verifyButtonScale) // Apply scale animation for tap feedback
-            }
-            .disabled(loading || otp.isEmpty) // Disable button during loading or if OTP is empty
-            .padding(.horizontal)
-            .onTapGesture {
-                // Animate button press
-                withAnimation(.spring()) { verifyButtonScale = 0.95 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    withAnimation(.spring()) { verifyButtonScale = 1.0 }
+                    .cornerRadius(25)
+                    .scaleEffect(verifyButtonScale)
                 }
-            }
+                .disabled(loading || otp.isEmpty)
+                .padding(.horizontal)
+                .onTapGesture {
+                    withAnimation(.spring()) { verifyButtonScale = 0.95 }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        withAnimation(.spring()) { verifyButtonScale = 1.0 }
+                    }
+                }
             
             // MARK: - Resend OTP Button
             Button(action: {
@@ -198,40 +231,162 @@ struct VerifyOtp: View {
     }
 
 
-     private func handleVerifyOTP() {
-        guard isValidPhoneNumber() else { return }
-        loading = true
-        Task {
-            do {
-                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/send-otp")!)
-                request.httpMethod = "POST"
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                let body: [String: Any] = ["phoneNumber": phoneNumber]
-                request.httpBody = try JSONSerialization.data(withJSONObject: body)
+/*
+private func handleVerifyOTP() {
+    guard !otp.isEmpty else {
+        errorMessage = "Please enter the OTP code."
+        return
+    }
+    guard let phoneNumber = phoneNumber else {
+        errorMessage = "Phone number is missing."
+        return
+    }
+    loading = true
+    errorMessage = nil
+    Task {
+        do {
+            var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/verify-otp")!)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            let body: [String: Any] = ["phoneNumber": phoneNumber, "otp": otp]
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-                let (_, response) = try await URLSession.shared.data(for: request)
-                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+           
+           
+           
+            // let (_, response) = try await URLSession.shared.data(for: request)
+            // guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            //     DispatchQueue.main.async {
+            //         errorMessage = "Failed to verify OTP"
+            //         loading = false
+            //     }
+            //     return
+            // }
+
+            // DispatchQueue.main.async {
+            //     loading = false
+            //     showSuccessAlert = true
+            //     path.append(AppRoute.home)
+            // }
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("✅ Backend response: \(jsonString)")
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
                     DispatchQueue.main.async {
-                        errorMessage = "Failed to send OTP"
+                        errorMessage = "Invalid response from server."
                         loading = false
                     }
                     return
                 }
 
-                DispatchQueue.main.async {
-                    loading = false
-                    path.append(AppRoute.verifyOtp(phoneNumber: phoneNumber))
+                guard httpResponse.statusCode == 200 else {
+                    // Attempt to decode a specific error message from the response data
+                    if let errorData = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        DispatchQueue.main.async {
+                            self.errorMessage = errorData.error ?? "Failed to verify OTP with status \(httpResponse.statusCode)."
+                            self.loading = false
+                        }
+                    } else {
+                        // Fallback for non-JSON error responses
+                        DispatchQueue.main.async {
+                            self.errorMessage = "Failed to verify OTP with status \(httpResponse.statusCode)."
+                            self.loading = false
+                        }
+                    }
+                    return
                 }
-            } catch {
+
+                // Proceed with success handling
+                let responseData = try JSONDecoder().decode(VerifyOTPResponse.self, from: data)
+                try await KeychainHelper.saveToken(responseData.token)
+
                 DispatchQueue.main.async {
-                    errorMessage = "Failed to connect: \(error.localizedDescription)"
-                    loading = false
+                    self.loading = false
+                    self.showSuccessAlert = true
+                    self.path.append(AppRoute.home)
                 }
+
+
+
+
+
+
+        } catch {
+            DispatchQueue.main.async {
+                errorMessage = "Failed to connect: \(error.localizedDescription)"
+                loading = false
             }
         }
     }
+}
+
+*/
 
 
+private func handleVerifyOTP() {
+    guard !otp.isEmpty else {
+        errorMessage = "Please enter the OTP code."
+        return
+    }
+    guard let phoneNumber = phoneNumber else {
+        errorMessage = "Phone number is missing."
+        return
+    }
+    loading = true
+    errorMessage = nil
+    Task {
+        do {
+            var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/verify-otp")!)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            let body: [String: Any] = ["phoneNumber": phoneNumber, "otp": otp]
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                DispatchQueue.main.async {
+                    errorMessage = "Failed to verify OTP"
+                    loading = false
+                }
+                return
+            }
+
+            let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+            let token = json?["token"] as? String
+
+            DispatchQueue.main.async {
+                loading = false
+                if let token = token {
+                    AuthManager.shared.setToken(token)
+                    showSuccessAlert = true
+                    path.append(AppRoute.home)
+                } else {
+                    errorMessage = "No token received from server"
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                errorMessage = "Failed to connect: \(error.localizedDescription)"
+                loading = false
+            }
+        }
+    }
+}
+
+
+
+// Accessing token in other pages : 
+
+
+// if let token = AuthManager.shared.getToken() {
+//     var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
+//     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+//     // Make request
+// }
 
 
 }

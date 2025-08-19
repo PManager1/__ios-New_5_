@@ -32,7 +32,7 @@ struct HomeView: View {
                     .font(.title2)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.gray.opacity(0.2))
+                    .background(Color.blue.opacity(0.2))
                     .foregroundColor(.black)
                     .cornerRadius(10)
             }
