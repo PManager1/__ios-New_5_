@@ -1,75 +1,5 @@
-/*
-import SwiftUI
 
-struct VerifyOtp: View {
-    let phoneNumber: String?
-
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Verify OTP")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-
-            Button(action: {
-                print("Button 1 tapped")
-            }) {
-                Text("Button 1")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Button 1")
-
-            Button(action: {
-                print("Button 2 tapped")
-            }) {
-                Text("Button 2")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Button 2")
-
-            Button(action: {
-                print("Button 3 tapped")
-            }) {
-                Text("Button 3")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Button 3")
-
-            Spacer()
-        }
-        .padding()
-        .navigationTitle("Verify OTP")
-        .background(Color.white)
-        .onAppear {
-            print("VerifyOtp screen initialized for phone number: \(phoneNumber ?? "none")")
-        }
-    }
-}
-
-struct VerifyOtp_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            VerifyOtp(phoneNumber: nil)
-        }
-    }
-}
-*/
-
-
+ 
 
 
 import SwiftUI
@@ -77,7 +7,14 @@ import Combine
 
 // MARK: - VerifyOtp
 // Ensure this entire struct definition replaces your existing one in VerifyOtp.swift.
-struct VerifyOtp: View, Hashable { // <-- Must conform to Hashable for NavigationPath
+
+// struct VerifyOtp: View, Hashable { // <-- Must conform to Hashable for NavigationPath
+
+
+struct VerifyOtp: View {
+    
+    @Binding var path: NavigationPath
+
     let phoneNumber: String? // Optional String property to receive data
     
     @State private var otp: String = ""
@@ -94,8 +31,9 @@ struct VerifyOtp: View, Hashable { // <-- Must conform to Hashable for Navigatio
     @FocusState private var otpFieldIsFocused: Bool // Manages keyboard focus
     
     // Initializer to allow phoneNumber to be optional when creating VerifyOtp
-    init(phoneNumber: String? = nil) {
+    init(phoneNumber: String? = nil, path: Binding<NavigationPath>) {
         self.phoneNumber = phoneNumber
+        self._path = path
     }
 
     // MARK: - Hashable Conformance:
@@ -262,6 +200,7 @@ struct VerifyOtp: View, Hashable { // <-- Must conform to Hashable for Navigatio
                 dismissButton: .default(Text("OK")) {
                     // This is where you'd typically navigate away from VerifyOtp.
                     // For instance, path.append(AppRoute.home) if you had a path binding here.
+                    path.append(AppRoute.home)
                 }
             )
         }
@@ -272,7 +211,87 @@ struct VerifyOtp: View, Hashable { // <-- Must conform to Hashable for Navigatio
 struct VerifyOtp_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            VerifyOtp(phoneNumber: "+1234567890") // Provide a sample phone number for preview
+//            VerifyOtp(phoneNumber: "+1234567890") // Provide a sample phone number for preview
+            VerifyOtp(phoneNumber: "+1234567890", path: .constant(NavigationPath()))
+            
         }
     }
 }
+
+
+
+
+/*
+
+import SwiftUI
+
+struct VerifyOtp: View {
+    let phoneNumber: String?
+    @Binding var path: NavigationPath
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Verify OTP")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Text("Phone: \(phoneNumber ?? "Not provided")")
+                .font(.body)
+                .foregroundColor(.gray)
+                .accessibilityLabel("Phone number: \(phoneNumber ?? "Not provided")")
+
+            Button(action: {
+                path.append(AppRoute.home)
+            }) {
+                Text("Go to Home")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Go to Home")
+
+            Button(action: {
+                print("Verify OTP Button 1 tapped")
+            }) {
+                Text("Verify OTP Button 1")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Verify OTP Button 1")
+
+            Button(action: {
+                print("Verify OTP Button 2 tapped")
+            }) {
+                Text("Verify OTP Button 2")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Verify OTP Button 2")
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Verify OTP")
+    }
+}
+
+struct VerifyOtp_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            VerifyOtp(phoneNumber: nil, path: .constant(NavigationPath()))
+        }
+    }
+}
+
+*/

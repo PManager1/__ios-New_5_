@@ -1,3 +1,99 @@
+import SwiftUI
+
+struct HomeView: View {
+    @Binding var path: NavigationPath
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Welcome to Birdy")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Button(action: {
+                path.append(AppRoute.signIn)
+            }) {
+                Text("Go to Sign In")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Go to Sign In")
+
+
+
+
+            Button(action: {
+                print("Home Button 1 tapped")
+            }) {
+                Text("Home Button 1")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Home Button 1")
+
+            Button(action: {
+                print("Home Button 2 tapped")
+            }) {
+                Text("Home Button 2")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Home Button 2")
+
+            Button(action: {
+                print("Home Button 3 tapped")
+            }) {
+                Text("Home Button 3")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Home Button 3")
+
+            Button(action: {
+                print("Home Button 4 tapped")
+            }) {
+                Text("Home Button 4")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("Home Button 4")
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Home")
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            HomeView(path: .constant(NavigationPath()))
+        }
+    }
+}
+
+
+
 /*
 import SwiftUI
 struct HomeView: View {
@@ -161,106 +257,3 @@ struct HomeView_Previews: PreviewProvider {
 
 
 */
-
-
-
-import SwiftUI
-
-struct HomeView: View {
-    // THIS IS THE CRITICAL LINE: HomeView needs to accept the path as a binding
-    @Binding var path: NavigationPath 
-    
-    // REMOVE THIS LINE: @State static var previewPath = NavigationPath() // <--- DELETE THIS LINE from here!
-    
-    var body: some View {
-        // No NavigationStack needed here as NavigationControllerView already provides it
-        // NavigationStack { // <--- REMOVE this NavigationStack, it's redundant
-            VStack(spacing: 20) {
-                Text("Welcome to Birdy")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                // Now this will work because HomeView has a 'path' binding
-                NavigationLink(destination: SignInView(path: $path)) {
-
-                    Text("Sign In")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .accessibilityLabel("Sign In")
-                
-                // If VerifyOtp requires phoneNumber, pass it here too:
-                NavigationLink(destination: VerifyOtp(phoneNumber: nil)) { // Example: passing nil
-                    Text("VerifyOtp")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .accessibilityLabel("verify OTP")
-                
-                
-                // ... (rest of your buttons) ...
-                Button(action: {
-                    print("Button 1 tapped")
-                }) {
-                    Text("Button 1")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
-                }
-                .accessibilityLabel("Verify OTP")
-                
-                Button(action: {
-                    print("Button 2 tapped")
-                }) {
-                    Text("Button 2")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
-                }
-                .accessibilityLabel("Custom Button 2")
-                
-                Button(action: {
-                    print("Button 3 tapped")
-                }) {
-                    Text("Button 3")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .foregroundColor(.black)
-                        .cornerRadius(10)
-                }
-                .accessibilityLabel("Custom Button 3")
-                
-                Spacer()
-            }
-            .padding()
-            .navigationTitle("Home")
-        // } // <--- REMOVE this closing brace for NavigationStack
-    }
-}
-
-struct HomeView_Previews: PreviewProvider {
-    // This is correct: declare it here for the preview's scope
-    @State static var previewPath = NavigationPath() 
-
-    static var previews: some View {
-        // This is correct: pass the binding to HomeView for the preview
-        HomeView(path: $previewPath) 
-    }
-}
-

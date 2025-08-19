@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct NavigationFlow: View {
@@ -15,10 +16,12 @@ struct NavigationFlow: View {
             }
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
+                case .home:
+                    HomeView(path: $path)
                 case .signIn:
                     SignInView(path: $path)
                 case .verifyOtp(let phoneNumber):
-                    VerifyOtp(phoneNumber: phoneNumber)
+                    VerifyOtp(phoneNumber: phoneNumber, path: $path)
                 }
             }
         }
@@ -37,3 +40,5 @@ struct NavigationFlow_Previews: PreviewProvider {
         NavigationFlow()
     }
 }
+
+
