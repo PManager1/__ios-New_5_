@@ -25,6 +25,20 @@ struct HomeView: View {
 
 
             Button(action: {
+                path.append(AppRoute.GoMapView)
+                print("GoMapView  tapped")
+            }) {
+                Text("GoMapView")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .accessibilityLabel("GoMapView")
+
+                Button(action: {
                 path.append(AppRoute.NewView)
                 print("NewView  tapped")
             }) {

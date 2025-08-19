@@ -25,7 +25,9 @@ struct NavigationFlow: View {
                     VerifyOtp(phoneNumber: phoneNumber, path: $path)
                 case .NewView:
                     NewView(path: $path)
-                }
+                case .GoMapView:
+                    GoMapView(path: $path)
+                }  
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

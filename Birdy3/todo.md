@@ -1,6 +1,6 @@
 AUGUEST 19- 2025  -
 
-Recent gomapview - have the nicer UI but previous one shows the blue lines on the map. 
+Recent gomapview - have the nicer UI but previous (ios-nav) one shows the blue lines on the map. 
 
 
 

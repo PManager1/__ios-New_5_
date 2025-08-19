@@ -7,4 +7,5 @@ enum AppRoute: Hashable {
     case signIn
     case verifyOtp(phoneNumber: String?)
     case NewView
+    case GoMapView
 }

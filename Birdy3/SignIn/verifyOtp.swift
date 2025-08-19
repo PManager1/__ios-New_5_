@@ -1,18 +1,9 @@
 
- 
-
-
 import SwiftUI
 import Combine
 
-// MARK: - VerifyOtp
-// Ensure this entire struct definition replaces your existing one in VerifyOtp.swift.
-
-// struct VerifyOtp: View, Hashable { // <-- Must conform to Hashable for NavigationPath
-
 
 struct VerifyOtp: View {
-    
     @Binding var path: NavigationPath
 
     let phoneNumber: String? // Optional String property to receive data
@@ -205,6 +196,44 @@ struct VerifyOtp: View {
             )
         }
     }
+
+
+     private func handleVerifyOTP() {
+        guard isValidPhoneNumber() else { return }
+        loading = true
+        Task {
+            do {
+                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/send-otp")!)
+                request.httpMethod = "POST"
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                let body: [String: Any] = ["phoneNumber": phoneNumber]
+                request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+                let (_, response) = try await URLSession.shared.data(for: request)
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to send OTP"
+                        loading = false
+                    }
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    loading = false
+                    path.append(AppRoute.verifyOtp(phoneNumber: phoneNumber))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    errorMessage = "Failed to connect: \(error.localizedDescription)"
+                    loading = false
+                }
+            }
+        }
+    }
+
+
+
+
 }
 
 // MARK: - Preview Provider
