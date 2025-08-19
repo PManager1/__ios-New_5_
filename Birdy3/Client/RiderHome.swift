@@ -41,6 +41,8 @@ struct RiderHome: View {
                                         containerScale = 0.98
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
                                             containerScale = 1.0
+
+                                            path.append(AppRoute.chooseRide) // <-- ADD THIS LINE
                                             print("Navigating to RidePlan with destination: \(destination)")
                                         }
                                     }
@@ -58,6 +60,7 @@ struct RiderHome: View {
                                 containerScale = 0.98
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
                                     containerScale = 1.0
+                                    path.append(AppRoute.chooseRide) // <-- ADD THIS LINE
                                     print("Selected: 28 Froude Cir, Cabin John, MD")
                                 }
                             }
@@ -95,6 +98,7 @@ struct RiderHome: View {
                                 containerScale = 0.98
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
                                     containerScale = 1.0
+                                    path.append(AppRoute.chooseRide) // <-- ADD THIS LINE
                                     print("Selected: 95 Garrisonville Rd, Stafford, VA")
                                 }
                             }

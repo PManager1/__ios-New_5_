@@ -9,4 +9,8 @@ enum AppRoute: Hashable {
     case NewView
     case GoMapView
     case UserSettingView
+
+    case RiderHome
+    case chooseRide
+
 }

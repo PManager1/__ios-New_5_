@@ -27,9 +27,14 @@ struct NavigationFlow: View {
                     NewView(path: $path)  
                 case .UserSettingView:
                     UserSettingView(path: $path)                      
+                case .RiderHome:
+                    RiderHome(path: $path) 
+                case .chooseRide:
+                    ChooseRide(path: $path)                     
                 case .GoMapView:
                     GoMapView(path: $path)
                 }  
+                
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {

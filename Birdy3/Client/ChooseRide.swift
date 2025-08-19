@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ChooseRide: View {
+    @Binding var path: NavigationPath
+    
     @State private var selectedRide: String = "Birdy X"
     @State private var errorMessage: String = ""
     @State private var screen: String = "ride"
@@ -510,6 +512,9 @@ let rideOptions: [RideOption] = [
 
 struct ChooseRide_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseRide()
+        // ChooseRide()
+         NavigationStack {
+            ChooseRide(path: .constant(NavigationPath()))
+        }
     }
 }
