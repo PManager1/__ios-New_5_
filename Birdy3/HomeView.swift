@@ -24,11 +24,11 @@ struct HomeView: View {
 
 
 
-
             Button(action: {
-                print("Home Button 1 tapped")
+                path.append(AppRoute.NewView)
+                print("NewView  tapped")
             }) {
-                Text("Home Button 1")
+                Text("NewView")
                     .font(.title2)
                     .frame(maxWidth: .infinity)
                     .padding()

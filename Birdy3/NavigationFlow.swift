@@ -4,7 +4,7 @@ import SwiftUI
 struct NavigationFlow: View {
     @State private var showSplash = true
     @State private var path = NavigationPath()
-
+    
     var body: some View {
         NavigationStack(path: $path) {
             Group {
@@ -23,23 +23,25 @@ struct NavigationFlow: View {
                     SignInView(path: $path)
                 case .verifyOtp(let phoneNumber):
                     VerifyOtp(phoneNumber: phoneNumber, path: $path)
+                case .NewView:
+                    NewView(path: $path)
                 }
             }
-        }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                withAnimation {
-                    showSplash = false
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    withAnimation {
+                        showSplash = false
+                    }
                 }
             }
         }
     }
 }
-
-struct NavigationFlow_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationFlow()
+    
+    struct NavigationFlow_Previews: PreviewProvider {
+        static var previews: some View {
+            NavigationFlow()
+        }
     }
-}
-
-
+    
+    

@@ -1,7 +1,12 @@
 
+
+
 import SwiftUI
 
 struct NewView: View {
+    
+    @Binding var path: NavigationPath
+
     var body: some View {
         ZStack {
             Color.gray.opacity(0.2)
@@ -15,10 +20,15 @@ struct NewView: View {
     }
 }
 
+
+
 struct NewView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            NewView()
+        NavigationStack {
+            NewView(path: .constant(NavigationPath()))
         }
     }
 }
+
+
+

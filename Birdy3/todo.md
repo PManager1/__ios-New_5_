@@ -1,3 +1,11 @@
+AUGUEST 19- 2025  -
+
+Recent gomapview - have the nicer UI but previous one shows the blue lines on the map. 
+
+
+
+
+
 AUGUEST 16- 2025  -
 Im able to get the trips data on GoMapView when i dont have the signin screen hooked up yet. Wtf.
 
