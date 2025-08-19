@@ -76,16 +76,10 @@ struct HomeView: View {
                         .padding(.top, 10)
 
         SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        // SettingsButton(title: "CurrentLocation", color: Color(hex: "#FF9800"), destination: {  CurrentLocation()   })
+        SettingsButton(title: "RiderHome", color: Color(hex: "#FF9800"), destination: {  RiderHome(path: $path)   })
         SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
         SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
-        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
+        
 
 
         SettingsButton(title: "RiderHome", color: Color(hex: "#FF9800"), destination: {  RiderHome(path: $path)   })
@@ -93,6 +87,12 @@ struct HomeView: View {
         // SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
 
 
+            Text("Rider")
+                        .font(.custom("Nunito-Bold", size: 18))
+                        .foregroundColor(Color(red: 30/255, green: 64/255, blue: 175/255))
+                        .padding(.top, 10)
+        SettingsButton(title: "RiderHome", color: Color(hex: "#FF9800"), destination: {  RiderHome(path: $path)   })
+        SettingsButton(title: "NewView", color: Color(hex: "#FF9800"), destination: {  NewView(path: $path)   })
          
 
             Spacer()
