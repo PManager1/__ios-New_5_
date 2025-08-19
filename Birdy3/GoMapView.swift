@@ -680,8 +680,15 @@ VStack {
             var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)trips/getTrips")!)
             request.httpMethod = "GET"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            if let token = try? await KeychainHelper.getToken() {
+            
+            // if let token = try? await KeychainHelper.getToken() {
+            //     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            // }
+
+            if let token = AuthManager.shared.getToken() {
+                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
                 request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                // Make request
             }
             
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -760,9 +767,18 @@ VStack {
         var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)api/route")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        if let token = try? await KeychainHelper.getToken() {
-            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
+
+
+        // if let token = try? await KeychainHelper.getToken() {
+        //     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        // }
+
+    if let token = AuthManager.shared.getToken() {
+        var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        // Make request
+            }
+   
         
         let body: [String: Any] = ["start": start, "pickup": pickup, "dropoff": dropoff]
         guard let requestBody = try? JSONSerialization.data(withJSONObject: body) else {
