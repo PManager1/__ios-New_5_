@@ -57,7 +57,22 @@ struct HomeView: View {
             }
             .accessibilityLabel("GoMapView")
 
-                Button(action: {
+             Button(action: {
+                path.append(AppRoute.UserSettingView)
+                print("UserSettingView  tapped")
+            }) {
+                Text("UserSettingView")
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            // .accessibilityLabel("Home Button 1")
+
+
+            Button(action: {
                 path.append(AppRoute.NewView)
                 print("NewView  tapped")
             }) {
