@@ -24,7 +24,9 @@ struct NavigationFlow: View {
                 case .verifyOtp(let phoneNumber):
                     VerifyOtp(phoneNumber: phoneNumber, path: $path)
                 case .NewView:
-                    NewView(path: $path)
+                    NewView(path: $path)  
+                case .UserSettingView:
+                    UserSettingView(path: $path)                      
                 case .GoMapView:
                     GoMapView(path: $path)
                 }  

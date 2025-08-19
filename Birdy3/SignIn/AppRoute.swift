@@ -8,4 +8,5 @@ enum AppRoute: Hashable {
     case verifyOtp(phoneNumber: String?)
     case NewView
     case GoMapView
+    case UserSettingView
 }
