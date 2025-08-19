@@ -685,11 +685,24 @@ VStack {
             //     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             // }
 
-            if let token = AuthManager.shared.getToken() {
-                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
+            // if let token = AuthManager.shared.getToken() {
+            //     var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
+            //     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            //     // Make request
+            // }
+
+              if let token = AuthManager.shared.getToken() {
+                // This is the crucial line. We are adding a value to the 'request'
+                // declared at the top of this 'do' block, NOT creating a new one.
+                print("➡️ Attaching Authorization header with token (first 10 chars): \(token.prefix(10))...")
                 request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                // Make request
+            } else {
+                print("⚠️ AuthManager: No token found. Cannot attach Authorization header for trips request.")
+                // Decide how to handle no token: potentially show an error, redirect to login, etc.
+                // For now, the request will proceed without the header, likely failing due to auth.
             }
+
+
             
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
@@ -773,10 +786,21 @@ VStack {
         //     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         // }
 
-    if let token = AuthManager.shared.getToken() {
-        var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        // Make request
+    // if let token = AuthManager.shared.getToken() {
+    //     var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)some-endpoint")!)
+    //     request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    //     // Make request
+    //         }
+
+              if let token = AuthManager.shared.getToken() {
+                // This is the crucial line. We are adding a value to the 'request'
+                // declared at the top of this 'do' block, NOT creating a new one.
+                print("➡️ Attaching Authorization header with token (first 10 chars): \(token.prefix(10))...")
+                request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                print("⚠️ AuthManager: No token found. Cannot attach Authorization header for trips request.")
+                // Decide how to handle no token: potentially show an error, redirect to login, etc.
+                // For now, the request will proceed without the header, likely failing due to auth.
             }
    
         
