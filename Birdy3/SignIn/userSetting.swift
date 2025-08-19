@@ -29,44 +29,7 @@ struct UserSettingView: View {
                     .accessibilityLabel("Error: \(errorMessage)")
             }
 
-            Button(action: {
-                print("Settings Button 1 tapped")
-            }) {
-                Text("Settings Button 1")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Settings Button 1")
-
-            Button(action: {
-                print("Settings Button 2 tapped")
-            }) {
-                Text("Settings Button 2")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Settings Button 2")
-
-            Button(action: {
-                print("Settings Button 3 tapped")
-            }) {
-                Text("Settings Button 3")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Settings Button 3")
+          
 
             Spacer()
         }
@@ -77,38 +40,110 @@ struct UserSettingView: View {
         }
     }
 
-    private func validateToken() {
-        guard let token = AuthManager.shared.getToken() else {
-            errorMessage = "No token available"
-            isTokenValid = false
-            return
-        }
-        self.token = token
-        Task {
-            do {
-                var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/validate-token")!)
-                request.httpMethod = "POST"
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    // private func validateToken() {
+    //     guard let token = AuthManager.shared.getToken() else {
+    //         errorMessage = "No token available"
+    //         isTokenValid = false
+    //         return
+    //     }
+    //     self.token = token
+    //     Task {
+    //         do {
+    //             var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/validate-token")!)
+    //             request.httpMethod = "POST"
+    //             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    //             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
-                let (_, response) = try await URLSession.shared.data(for: request)
-                DispatchQueue.main.async {
-                    if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-                        isTokenValid = true
-                        errorMessage = nil
+    //             // let (_, response) = try await URLSession.shared.data(for: request)
+    //             // DispatchQueue.main.async {
+    //             //     if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+    //             //         isTokenValid = true
+    //             //         errorMessage = nil
+    //             //     } else {
+    //             //         isTokenValid = false
+    //             //         errorMessage = "Token validation failed"
+    //             //     }
+    //             // }
+
+    //             let (data, response) = try await URLSession.shared.data(for: request) // Capture 'data' here
+
+    //             // Log the raw JSON response from the backend
+    //             if let jsonString = String(data: data, encoding: .utf8) {
+    //                 print("Received backend response: \(jsonString)")
+    //             } else {
+    //                 print("Failed to convert backend response data to string.")
+    //             }
+
+    //             DispatchQueue.main.async {
+    //                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+    //                     self.isTokenValid = true // Use 'self' for state variables
+    //                     self.errorMessage = nil // Use 'self' for state variables
+    //                 } else {
+    //                     self.isTokenValid = false // Use 'self' for state variables
+    //                     // Attempt to decode error message from the backend response
+    //                     if let errorData = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+    //                         self.errorMessage = errorData.error ?? "Token validation failed" // Use 'self'
+    //                     } else {
+    //                         self.errorMessage = "Token validation failed" // Use 'self'
+    //                     }
+    //                 }
+    //             }
+
+
+    //         } catch {
+    //             DispatchQueue.main.async {
+    //                 isTokenValid = false
+    //                 errorMessage = "Failed to connect: \(error.localizedDescription)"
+    //             }
+    //         }
+    //     }
+    // }
+
+    private func validateToken() {
+    guard let token = AuthManager.shared.getToken() else {
+        errorMessage = "No token available"
+        isTokenValid = false
+        return
+    }
+    self.token = token
+
+    Task {
+        do {
+            var request = URLRequest(url: URL(string: "\(Config.apiBaseURL)auth/validate-token")!)
+            request.httpMethod = "GET"
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            // Debug log
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Received backend response: \(jsonString)")
+            }
+
+            DispatchQueue.main.async {
+                if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                    self.isTokenValid = true
+                    self.errorMessage = nil
+                } else {
+                    self.isTokenValid = false
+                    if let errorData = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        self.errorMessage = errorData.error ?? "Token validation failed"
                     } else {
-                        isTokenValid = false
-                        errorMessage = "Token validation failed"
+                        self.errorMessage = "Token validation failed"
                     }
                 }
-            } catch {
-                DispatchQueue.main.async {
-                    isTokenValid = false
-                    errorMessage = "Failed to connect: \(error.localizedDescription)"
-                }
+            }
+
+        } catch {
+            DispatchQueue.main.async {
+                self.isTokenValid = false
+                self.errorMessage = "Failed to connect: \(error.localizedDescription)"
             }
         }
     }
+}
+
+
 }
 
 struct UserSettingView_Previews: PreviewProvider {
