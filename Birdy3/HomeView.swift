@@ -23,25 +23,6 @@ struct HomeView: View {
             .accessibilityLabel("Go to Sign In")
 
 
-            Button(action: { path.append(AppRoute.userSettings) }) {
-                    Text("Go to User Settings")
-                        .font(.custom("Nunito-Bold", size: 16))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(
-                            LinearGradient(
-                                gradient: Gradient(colors: [Color.blue, Color(red: 59/255, green: 130/255, blue: 246/255)]),
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .cornerRadius(25)
-                }
-                .padding(.horizontal)
-
-
-
 
             Button(action: {
                 path.append(AppRoute.GoMapView)
