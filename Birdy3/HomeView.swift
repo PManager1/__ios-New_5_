@@ -67,44 +67,9 @@ struct HomeView: View {
             }
             .accessibilityLabel("Home Button 1")
 
-            Button(action: {
-                print("Home Button 2 tapped")
-            }) {
-                Text("Home Button 2")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Home Button 2")
+       
 
-            Button(action: {
-                print("Home Button 3 tapped")
-            }) {
-                Text("Home Button 3")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Home Button 3")
-
-            Button(action: {
-                print("Home Button 4 tapped")
-            }) {
-                Text("Home Button 4")
-                    .font(.title2)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
-            }
-            .accessibilityLabel("Home Button 4")
+         
 
             Spacer()
         }
